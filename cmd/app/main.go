@@ -24,6 +24,9 @@ func main() {
 	).Run()
 }
 
-func Invoke(server *gin.Engine, config *serverconfig.Config) {
-	server.Run(config.Port)
+func Invoke(server *gin.Engine, config *serverconfig.Config, log *zap.Logger) {
+	err := server.Run(config.Port)
+	if nil != err {
+		log.Error(err.Error())
+	}
 }

@@ -6,6 +6,6 @@ import (
 
 var MicroServicesModule = fx.Module(
 	"MicroServices",
-	fx.Provide(newServerEngine),
 	dbModule,
+	serverModule,
 )

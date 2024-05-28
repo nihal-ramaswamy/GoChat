@@ -30,7 +30,12 @@ func newServerEngine(lc fx.Lifecycle, config *serverconfig.Config, log *zap.Logg
 		},
 		OnStop: func(ctx context.Context) error {
 			log.Info("Stopping server")
-			defer log.Sync()
+			defer func() {
+				err := log.Sync()
+				if nil != err {
+					log.Error(err.Error())
+				}
+			}()
 
 			return nil
 		},
