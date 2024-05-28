@@ -1,7 +1,14 @@
 package healthcheck_api
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
 
+	"github.com/gin-gonic/gin"
+)
+
+// Any API in this call needs to be prefixed with /room.
+
+// HealthCheckHandler implements HandlerInterface.
 type HealthCheckHandler struct {
 }
 
@@ -11,7 +18,7 @@ func (*HealthCheckHandler) Pattern() string {
 
 func (*HealthCheckHandler) Handler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
+		ctx.JSON(http.StatusOK, gin.H{
 			"message": "ok",
 		})
 	}

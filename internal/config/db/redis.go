@@ -1,8 +1,8 @@
 package db_config
 
 import (
-	"example.go_fx_gin/internal/constants"
-	"example.go_fx_gin/internal/utils"
+	"github.com/nihal-ramaswamy/GoVid/internal/constants"
+	"github.com/nihal-ramaswamy/GoVid/internal/utils"
 )
 
 type RedisConfig struct {

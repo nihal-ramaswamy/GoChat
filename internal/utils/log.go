@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"example.go_fx_gin/internal/constants"
+	"github.com/nihal-ramaswamy/GoVid/internal/constants"
 	"go.uber.org/zap"
 )
 

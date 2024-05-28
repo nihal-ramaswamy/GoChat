@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"example.go_fx_gin/internal/constants"
 	"github.com/joho/godotenv"
+	"github.com/nihal-ramaswamy/GoVid/internal/constants"
 )
 
 // TODO: Clean this piece of code.

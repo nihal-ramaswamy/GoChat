@@ -3,11 +3,11 @@ package fx_utils
 import (
 	"context"
 
-	serverconfig "example.go_fx_gin/internal/config/server"
-	middleware "example.go_fx_gin/internal/middleware/log"
-	"example.go_fx_gin/internal/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	serverconfig "github.com/nihal-ramaswamy/GoVid/internal/config/server"
+	middleware "github.com/nihal-ramaswamy/GoVid/internal/middleware/log"
+	"github.com/nihal-ramaswamy/GoVid/internal/routes"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -20,7 +20,7 @@ func newServerEngine(lc fx.Lifecycle, config *serverconfig.Config, log *zap.Logg
 	server.Use(middleware.DefaultStructuredLogger(log))
 	server.Use(gin.Recovery())
 
-	utils.NewRoutes(server)
+	routes.NewRoutes(server)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {

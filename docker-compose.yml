@@ -1,5 +1,5 @@
 services:
-  money_splitter:
+  go_vid:
     container_name: money_splitter
     image: golang
     build: .
@@ -17,7 +17,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/money_splitter.sql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/go_vid.sql
   cache_db:
     container_name: cache_db
     image: redis:alpine

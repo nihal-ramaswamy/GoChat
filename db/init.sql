@@ -1,0 +1,3 @@
+CREATE DATABASE go_vid;
+\c go_vid;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

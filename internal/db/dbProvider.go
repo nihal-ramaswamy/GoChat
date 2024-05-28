@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	db_config "example.go_fx_gin/internal/config/db"
+	db_config "github.com/nihal-ramaswamy/GoVid/internal/config/db"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )

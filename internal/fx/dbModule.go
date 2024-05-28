@@ -3,7 +3,7 @@ package fx_utils
 import (
 	"context"
 
-	"example.go_fx_gin/internal/db"
+	"github.com/nihal-ramaswamy/GoVid/internal/db"
 	"go.uber.org/fx"
 )
 

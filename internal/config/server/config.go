@@ -3,10 +3,10 @@ package serverconfig
 import (
 	"log"
 
-	"example.go_fx_gin/internal/constants"
-	"example.go_fx_gin/internal/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/nihal-ramaswamy/GoVid/internal/constants"
+	"github.com/nihal-ramaswamy/GoVid/internal/utils"
 )
 
 type Config struct {

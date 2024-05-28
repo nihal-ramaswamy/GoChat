@@ -22,4 +22,12 @@ const (
 	SECRET_KEY = "SECRET_KEY"
 
 	ENV = "ENV"
+
+	// UUID generation
+	UUID_CHARACTERS = "qwertyuiopasdfghjklzxcvbnm"
+	UUID_LENGTH     = 9
 )
+
+func GetRuneUuidCharacters() []rune {
+	return []rune(UUID_CHARACTERS)
+}

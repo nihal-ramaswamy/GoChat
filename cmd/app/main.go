@@ -1,10 +1,10 @@
 package main
 
 import (
-	serverconfig "example.go_fx_gin/internal/config/server"
-	fx_utils "example.go_fx_gin/internal/fx"
-	"example.go_fx_gin/internal/utils"
 	"github.com/gin-gonic/gin"
+	serverconfig "github.com/nihal-ramaswamy/GoVid/internal/config/server"
+	fx_utils "github.com/nihal-ramaswamy/GoVid/internal/fx"
+	"github.com/nihal-ramaswamy/GoVid/internal/utils"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"

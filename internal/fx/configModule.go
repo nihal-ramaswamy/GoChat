@@ -1,8 +1,8 @@
 package fx_utils
 
 import (
-	db_config "example.go_fx_gin/internal/config/db"
-	serverconfig "example.go_fx_gin/internal/config/server"
+	db_config "github.com/nihal-ramaswamy/GoVid/internal/config/db"
+	serverconfig "github.com/nihal-ramaswamy/GoVid/internal/config/server"
 	"go.uber.org/fx"
 )
 
