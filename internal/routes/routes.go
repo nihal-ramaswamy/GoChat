@@ -5,6 +5,8 @@ import (
 	"github.com/gorilla/websocket"
 	healthcheck_api "github.com/nihal-ramaswamy/GoVid/internal/api/healthcheck"
 	rooms_api "github.com/nihal-ramaswamy/GoVid/internal/api/rooms"
+	"github.com/nihal-ramaswamy/GoVid/internal/constants"
+	"github.com/nihal-ramaswamy/GoVid/internal/interfaces"
 	"go.uber.org/zap"
 )
 
@@ -13,23 +15,30 @@ func NewRoutes(
 	upgrader *websocket.Upgrader,
 	log *zap.Logger,
 ) {
-	// healthcheck
-	healthCheckHandler := healthcheck_api.NewHealthCheckHandler()
-
-	healthcheck := server.Group("/healthcheck")
-	{
-		healthcheck.GET(healthCheckHandler.Pattern(), healthCheckHandler.Handler())
+	serverGroupHandlers := []interfaces.ServerGroupInterface{
+		healthcheck_api.NewHealthCheckGroup(),
+		rooms_api.NewRoomGroup(log, upgrader),
 	}
 
-	// room
-	roomCreateHandler := rooms_api.NewRoomCretateHandler()
-	roomJoinHandler := rooms_api.NewRoomJoinHandler()
-	roomWebSocketHandler := rooms_api.NewRoomWebsocketHandler(log, upgrader)
+	for _, serverGroupHandler := range serverGroupHandlers {
+		newGroup(server, serverGroupHandler)
+	}
+}
 
-	room := server.Group("/room")
+func newGroup(server *gin.Engine, groupHandler interfaces.ServerGroupInterface) {
+	group := server.Group(groupHandler.Group())
 	{
-		room.GET(roomCreateHandler.Pattern(), roomCreateHandler.Handler())
-		room.GET(roomJoinHandler.Pattern(), roomJoinHandler.Handler())
-		room.GET(roomWebSocketHandler.Pattern(), roomWebSocketHandler.Handler())
+		for _, route := range groupHandler.RouteHandlers() {
+			newRoute(group, route)
+		}
+	}
+}
+
+func newRoute(server *gin.RouterGroup, routeHandler interfaces.HandlerInterface) {
+	switch routeHandler.RequestMethod() {
+	case constants.GET:
+		server.GET(routeHandler.Pattern(), routeHandler.Handler())
+	case constants.POST:
+		server.POST(routeHandler.Pattern(), routeHandler.Handler())
 	}
 }
