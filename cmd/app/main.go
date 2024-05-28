@@ -19,6 +19,7 @@ func main() {
 
 		fx_utils.ConfigModule,
 		fx_utils.MicroServicesModule,
+		fx_utils.WebsocketModule,
 
 		fx.Invoke(Invoke),
 	).Run()

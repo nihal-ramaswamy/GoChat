@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 	serverconfig "github.com/nihal-ramaswamy/GoVid/internal/config/server"
 	middleware "github.com/nihal-ramaswamy/GoVid/internal/middleware/log"
 	"github.com/nihal-ramaswamy/GoVid/internal/routes"
@@ -12,7 +13,12 @@ import (
 	"go.uber.org/zap"
 )
 
-func newServerEngine(lc fx.Lifecycle, config *serverconfig.Config, log *zap.Logger) *gin.Engine {
+func newServerEngine(
+	lc fx.Lifecycle,
+	config *serverconfig.Config,
+	log *zap.Logger,
+	upgrader *websocket.Upgrader,
+) *gin.Engine {
 	gin.SetMode(config.GinMode)
 
 	server := gin.Default()
@@ -20,7 +26,7 @@ func newServerEngine(lc fx.Lifecycle, config *serverconfig.Config, log *zap.Logg
 	server.Use(middleware.DefaultStructuredLogger(log))
 	server.Use(gin.Recovery())
 
-	routes.NewRoutes(server)
+	routes.NewRoutes(server, upgrader, log)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {

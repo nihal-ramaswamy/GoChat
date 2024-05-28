@@ -4,5 +4,5 @@ import "github.com/gin-gonic/gin"
 
 type HandlerInterface interface {
 	Pattern() string
-	Handler() gin.HandlerFunc
+	Handler(args ...interface{}) gin.HandlerFunc
 }

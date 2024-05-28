@@ -21,9 +21,7 @@ func (*RoomCreateHandler) Pattern() string {
 func (*RoomCreateHandler) Handler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uuidString := utils.NewUUID(constants.UUID_LENGTH)
-		ctx.JSON(http.StatusOK, gin.H{
-			"id": uuidString,
-		})
+		ctx.Redirect(http.StatusOK, "/room/"+uuidString)
 
 	}
 }
