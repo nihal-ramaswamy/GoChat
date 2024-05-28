@@ -24,12 +24,12 @@ func NewRoutes(
 	// room
 	roomCreateHandler := rooms_api.NewRoomCretateHandler()
 	roomJoinHandler := rooms_api.NewRoomJoinHandler()
-	roomWebSocketHandler := rooms_api.NewRoomWebsocketHandler()
+	roomWebSocketHandler := rooms_api.NewRoomWebsocketHandler(log, upgrader)
 
 	room := server.Group("/room")
 	{
 		room.GET(roomCreateHandler.Pattern(), roomCreateHandler.Handler())
 		room.GET(roomJoinHandler.Pattern(), roomJoinHandler.Handler())
-		room.GET(roomWebSocketHandler.Pattern(), roomWebSocketHandler.Handler(upgrader, log))
+		room.GET(roomWebSocketHandler.Pattern(), roomWebSocketHandler.Handler())
 	}
 }

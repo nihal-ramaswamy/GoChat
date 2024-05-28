@@ -7,12 +7,9 @@ import (
 
 var WebsocketModule = fx.Module(
 	"WebsocketModule",
-	fx.Provide(provideUpgrader),
+	fx.Provide(NewWebsocketUpgrader),
 )
 
-func provideUpgrader() *websocket.Upgrader {
-	return &websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
+func NewWebsocketUpgrader() *websocket.Upgrader {
+	return &websocket.Upgrader{}
 }

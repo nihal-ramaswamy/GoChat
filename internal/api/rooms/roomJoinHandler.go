@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nihal-ramaswamy/GoVid/internal/constants"
 	"github.com/nihal-ramaswamy/GoVid/internal/utils"
 )
 
@@ -14,7 +15,7 @@ func NewRoomJoinHandler() *RoomJoinHandler {
 	return &RoomJoinHandler{}
 }
 
-func (*RoomJoinHandler) Pattern() string {
+func (RoomJoinHandler) Pattern() string {
 	return "/:code"
 }
 
@@ -30,4 +31,8 @@ func (*RoomJoinHandler) Handler() gin.HandlerFunc {
 
 		utils.JoinRoom(roomCode)
 	}
+}
+
+func (*RoomJoinHandler) RequestMethod() string {
+	return constants.GET
 }

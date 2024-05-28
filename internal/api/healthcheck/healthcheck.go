@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nihal-ramaswamy/GoVid/internal/constants"
 )
 
-// Any API in this call needs to be prefixed with /room.
+// Any API in this call needs to be prefixed with /room
 
-// HealthCheckHandler implements HandlerInterface.
+// RoomCreateHandler implements HandlerInterface.
 type HealthCheckHandler struct {
 }
 
@@ -26,4 +27,8 @@ func (*HealthCheckHandler) Handler() gin.HandlerFunc {
 
 func NewHealthCheckHandler() *HealthCheckHandler {
 	return &HealthCheckHandler{}
+}
+
+func (*HealthCheckHandler) RequestMethod() string {
+	return constants.GET
 }

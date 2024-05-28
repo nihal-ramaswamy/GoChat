@@ -1,6 +1,6 @@
 services:
   go_vid:
-    container_name: money_splitter
+    container_name: go_vid
     image: golang
     build: .
     ports:
