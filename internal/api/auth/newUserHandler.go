@@ -27,6 +27,7 @@ func (n *NewUserHandler) Handler() gin.HandlerFunc {
 
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.Error(err)
+			n.log.Info("Responding with error", zap.Error(err))
 			c.AbortWithStatus(http.StatusBadRequest)
 		}
 
