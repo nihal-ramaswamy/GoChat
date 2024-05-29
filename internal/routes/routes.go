@@ -23,7 +23,7 @@ func NewRoutes(
 	ctx context.Context,
 ) {
 	serverGroupHandlers := []interfaces.ServerGroupInterface{
-		healthcheck_api.NewHealthCheckGroup(),
+		healthcheck_api.NewHealthCheckGroup(db, rdb, ctx, log),
 		auth_api.NewAuthGroup(db, rdb, ctx, log),
 	}
 
@@ -33,7 +33,7 @@ func NewRoutes(
 }
 
 func newGroup(server *gin.Engine, groupHandler interfaces.ServerGroupInterface) {
-	group := server.Group(groupHandler.Group())
+	group := server.Group(groupHandler.Group(), groupHandler.Middlewares()...)
 	{
 		for _, route := range groupHandler.RouteHandlers() {
 			newRoute(group, route)
@@ -42,10 +42,12 @@ func newGroup(server *gin.Engine, groupHandler interfaces.ServerGroupInterface) 
 }
 
 func newRoute(server *gin.RouterGroup, routeHandler interfaces.HandlerInterface) {
+	middlewares := routeHandler.Middlewares()
+	middlewares = append(middlewares, routeHandler.Handler())
 	switch routeHandler.RequestMethod() {
 	case constants.GET:
-		server.GET(routeHandler.Pattern(), routeHandler.Handler())
+		server.GET(routeHandler.Pattern(), middlewares...)
 	case constants.POST:
-		server.POST(routeHandler.Pattern(), routeHandler.Handler())
+		server.POST(routeHandler.Pattern(), middlewares...)
 	}
 }

@@ -1,5 +1,6 @@
 package constants
 
 const (
-	TOKEN = "token"
+	TOKEN  = "Token"
+	BEARER = "Bearer "
 )

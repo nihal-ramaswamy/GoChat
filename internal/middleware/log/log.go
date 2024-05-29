@@ -1,4 +1,4 @@
-package middleware
+package log_middleware
 
 import (
 	"time"

@@ -1,9 +1,18 @@
 package healthcheck_api
 
-import "github.com/nihal-ramaswamy/GoVid/internal/interfaces"
+import (
+	"context"
+	"database/sql"
+
+	"github.com/gin-gonic/gin"
+	"github.com/nihal-ramaswamy/GoVid/internal/interfaces"
+	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
+)
 
 type HealthCheckGroup struct {
 	routeHandlers []interfaces.HandlerInterface
+	middlewares   []gin.HandlerFunc
 }
 
 func (*HealthCheckGroup) Group() string {
@@ -14,12 +23,21 @@ func (h *HealthCheckGroup) RouteHandlers() []interfaces.HandlerInterface {
 	return h.routeHandlers
 }
 
-func NewHealthCheckGroup() *HealthCheckGroup {
+func NewHealthCheckGroup(pdb *sql.DB, rdb *redis.Client, ctx context.Context, log *zap.Logger) *HealthCheckGroup {
 	handlers := []interfaces.HandlerInterface{
-		NewHealthCheckHandler(),
+		NewHealthCheckHandler(pdb, rdb, ctx, log),
 	}
 
 	return &HealthCheckGroup{
 		routeHandlers: handlers,
+		middlewares:   []gin.HandlerFunc{},
 	}
+}
+
+func (*HealthCheckGroup) AuthRequired() bool {
+	return false
+}
+
+func (h *HealthCheckGroup) Middlewares() []gin.HandlerFunc {
+	return h.middlewares
 }

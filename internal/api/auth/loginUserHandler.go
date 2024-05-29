@@ -16,18 +16,20 @@ import (
 )
 
 type LoginUserHandler struct {
-	log *zap.Logger
-	db  *sql.DB
-	rdb *redis.Client
-	ctx context.Context
+	log         *zap.Logger
+	db          *sql.DB
+	rdb         *redis.Client
+	ctx         context.Context
+	middlewares []gin.HandlerFunc
 }
 
 func NewLoginUserHandler(db *sql.DB, rdb *redis.Client, ctx context.Context, log *zap.Logger) *LoginUserHandler {
 	return &LoginUserHandler{
-		log: log,
-		db:  db,
-		rdb: rdb,
-		ctx: ctx,
+		log:         log,
+		db:          db,
+		rdb:         rdb,
+		ctx:         ctx,
+		middlewares: []gin.HandlerFunc{},
 	}
 }
 
@@ -70,4 +72,8 @@ func (l *LoginUserHandler) Handler() gin.HandlerFunc {
 
 		c.JSON(http.StatusAccepted, gin.H{"token": token})
 	}
+}
+
+func (l *LoginUserHandler) Middlewares() []gin.HandlerFunc {
+	return l.middlewares
 }

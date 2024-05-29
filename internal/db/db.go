@@ -40,3 +40,7 @@ func DoesPasswordMatch(db *sql.DB, user *dto.User, log *zap.Logger) bool {
 
 	return bcrypt.CompareHashAndPassword([]byte(password), []byte(user.Password)) == nil
 }
+
+func GetUserFromEmail(db *sql.DB, email string) (dto.User, error) {
+	return selectAllFromUserWhereEmailIs(db, email)
+}

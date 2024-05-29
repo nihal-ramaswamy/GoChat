@@ -13,8 +13,9 @@ import (
 )
 
 type NewUserHandler struct {
-	db  *sql.DB
-	log *zap.Logger
+	db          *sql.DB
+	log         *zap.Logger
+	middlewares []gin.HandlerFunc
 }
 
 func (*NewUserHandler) Pattern() string {
@@ -53,4 +54,8 @@ func NewNewUserHandler(db *sql.DB, log *zap.Logger) *NewUserHandler {
 
 func (*NewUserHandler) RequestMethod() string {
 	return constants.POST
+}
+
+func (n *NewUserHandler) Middlewares() []gin.HandlerFunc {
+	return n.middlewares
 }
