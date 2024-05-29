@@ -43,7 +43,8 @@ func (l *LoginUserHandler) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := dto.NewUser()
 		if err := c.ShouldBindJSON(&user); nil != err {
-			c.Error(err)
+			err := c.Error(err)
+			l.log.Info("Responding with error", zap.Error(err))
 			c.AbortWithStatus(http.StatusBadRequest)
 		}
 		if !db.DoesEmailExist(l.db, user.Email) {
@@ -58,8 +59,10 @@ func (l *LoginUserHandler) Handler() gin.HandlerFunc {
 		}
 
 		token, err := utils.GenerateToken(user)
-		if err != nil {
-			c.Error(err)
+		if nil != err {
+			err := c.Error(err)
+			l.log.Info("Responding with error", zap.Error(err))
+
 			c.AbortWithStatus(http.StatusInternalServerError)
 		}
 
