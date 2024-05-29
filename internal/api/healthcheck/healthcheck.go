@@ -7,9 +7,6 @@ import (
 	"github.com/nihal-ramaswamy/GoVid/internal/constants"
 )
 
-// Any API in this call needs to be prefixed with /room
-
-// RoomCreateHandler implements HandlerInterface.
 type HealthCheckHandler struct {
 }
 

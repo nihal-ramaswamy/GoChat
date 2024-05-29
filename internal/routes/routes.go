@@ -1,12 +1,16 @@
 package routes
 
 import (
+	"context"
+	"database/sql"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	auth_api "github.com/nihal-ramaswamy/GoVid/internal/api/auth"
 	healthcheck_api "github.com/nihal-ramaswamy/GoVid/internal/api/healthcheck"
-	rooms_api "github.com/nihal-ramaswamy/GoVid/internal/api/rooms"
 	"github.com/nihal-ramaswamy/GoVid/internal/constants"
 	"github.com/nihal-ramaswamy/GoVid/internal/interfaces"
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
 
@@ -14,10 +18,13 @@ func NewRoutes(
 	server *gin.Engine,
 	upgrader *websocket.Upgrader,
 	log *zap.Logger,
+	db *sql.DB,
+	rdb *redis.Client,
+	ctx context.Context,
 ) {
 	serverGroupHandlers := []interfaces.ServerGroupInterface{
 		healthcheck_api.NewHealthCheckGroup(),
-		rooms_api.NewRoomGroup(log, upgrader),
+		auth_api.NewAuthGroup(db, rdb, ctx, log),
 	}
 
 	for _, serverGroupHandler := range serverGroupHandlers {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 	serverconfig "github.com/nihal-ramaswamy/GoVid/internal/config/server"
 	fx_utils "github.com/nihal-ramaswamy/GoVid/internal/fx"
 	"github.com/nihal-ramaswamy/GoVid/internal/utils"

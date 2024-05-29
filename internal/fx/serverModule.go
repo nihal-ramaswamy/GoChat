@@ -2,6 +2,7 @@ package fx_utils
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,7 @@ import (
 	serverconfig "github.com/nihal-ramaswamy/GoVid/internal/config/server"
 	middleware "github.com/nihal-ramaswamy/GoVid/internal/middleware/log"
 	"github.com/nihal-ramaswamy/GoVid/internal/routes"
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -18,6 +20,9 @@ func newServerEngine(
 	config *serverconfig.Config,
 	log *zap.Logger,
 	upgrader *websocket.Upgrader,
+	db *sql.DB,
+	rdb *redis.Client,
+	ctx context.Context,
 ) *gin.Engine {
 	gin.SetMode(config.GinMode)
 
@@ -26,7 +31,7 @@ func newServerEngine(
 	server.Use(middleware.DefaultStructuredLogger(log))
 	server.Use(gin.Recovery())
 
-	routes.NewRoutes(server, upgrader, log)
+	routes.NewRoutes(server, upgrader, log, db, rdb, ctx)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
