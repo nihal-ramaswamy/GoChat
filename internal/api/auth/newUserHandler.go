@@ -26,7 +26,7 @@ func (n *NewUserHandler) Handler() gin.HandlerFunc {
 		user := dto.NewUser()
 
 		if err := c.ShouldBindJSON(&user); err != nil {
-			c.Error(err)
+			err := c.Error(err)
 			n.log.Info("Responding with error", zap.Error(err))
 			c.AbortWithStatus(http.StatusBadRequest)
 		}
