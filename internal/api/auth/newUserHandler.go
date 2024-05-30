@@ -18,6 +18,13 @@ type NewUserHandler struct {
 	middlewares []gin.HandlerFunc
 }
 
+func NewNewUserHandler(db *sql.DB, log *zap.Logger) *NewUserHandler {
+	return &NewUserHandler{
+		db:  db,
+		log: log,
+	}
+}
+
 func (*NewUserHandler) Pattern() string {
 	return "/register"
 }
@@ -42,13 +49,6 @@ func (n *NewUserHandler) Handler() gin.HandlerFunc {
 
 		c.JSON(http.StatusAccepted, gin.H{"id": id})
 
-	}
-}
-
-func NewNewUserHandler(db *sql.DB, log *zap.Logger) *NewUserHandler {
-	return &NewUserHandler{
-		db:  db,
-		log: log,
 	}
 }
 

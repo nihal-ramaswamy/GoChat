@@ -8,3 +8,11 @@ type Conference struct {
 	CreatedAt time.Time `json:"created_at"`
 	Active    bool      `json:"active"`
 }
+
+func NewConference(code, admin string) *Conference {
+	return &Conference{
+		Code:   code,
+		Admin:  admin,
+		Active: true,
+	}
+}

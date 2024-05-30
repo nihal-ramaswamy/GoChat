@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 	auth_api "github.com/nihal-ramaswamy/GoVid/internal/api/auth"
 	healthcheck_api "github.com/nihal-ramaswamy/GoVid/internal/api/healthcheck"
+	rooms_api "github.com/nihal-ramaswamy/GoVid/internal/api/rooms"
 	"github.com/nihal-ramaswamy/GoVid/internal/constants"
 	"github.com/nihal-ramaswamy/GoVid/internal/interfaces"
 	"github.com/redis/go-redis/v9"
@@ -25,6 +26,7 @@ func NewRoutes(
 	serverGroupHandlers := []interfaces.ServerGroupInterface{
 		healthcheck_api.NewHealthCheckGroup(db, rdb, ctx, log),
 		auth_api.NewAuthGroup(db, rdb, ctx, log),
+		rooms_api.NewRoomsApi(db, log),
 	}
 
 	for _, serverGroupHandler := range serverGroupHandlers {

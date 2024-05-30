@@ -16,6 +16,12 @@ type HealthCheckHandler struct {
 	middlewares []gin.HandlerFunc
 }
 
+func NewHealthCheckHandler(pdb *sql.DB, rdb *redis.Client, ctx context.Context, log *zap.Logger) *HealthCheckHandler {
+	return &HealthCheckHandler{
+		middlewares: []gin.HandlerFunc{auth_middleware.AuthMiddleware(pdb, rdb, ctx, log)},
+	}
+}
+
 func (*HealthCheckHandler) Pattern() string {
 	return "/healthcheck"
 }
@@ -25,12 +31,6 @@ func (*HealthCheckHandler) Handler() gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, gin.H{
 			"message": "ok",
 		})
-	}
-}
-
-func NewHealthCheckHandler(pdb *sql.DB, rdb *redis.Client, ctx context.Context, log *zap.Logger) *HealthCheckHandler {
-	return &HealthCheckHandler{
-		middlewares: []gin.HandlerFunc{auth_middleware.AuthMiddleware(pdb, rdb, ctx, log)},
 	}
 }
 
