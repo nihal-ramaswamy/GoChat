@@ -10,5 +10,16 @@ var ConfigModule = fx.Module(
 	"Config",
 	fx.Provide(serverconfig.Default),
 	fx.Provide(db_config.GetPsqlInfoDefault),
-	fx.Provide(db_config.DefaultRedisConfig),
+	fx.Provide(
+		fx.Annotate(
+			db_config.DefaultRedisAuthConfig,
+			fx.ResultTags(`name:"auth_rdb_config"`),
+		),
+	),
+	fx.Provide(
+		fx.Annotate(
+			db_config.DefaultRedisWebsocketConfig,
+			fx.ResultTags(`name:"ws_rdb_config"`),
+		),
+	),
 )

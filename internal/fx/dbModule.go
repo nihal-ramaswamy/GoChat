@@ -14,5 +14,18 @@ var dbModule = fx.Module(
 	}),
 
 	fx.Provide(db.GetPostgresDbInstanceWithConfig),
-	fx.Provide(db.GetRedisDbInstanceWithConfig),
+	fx.Provide(
+		fx.Annotate(
+			db.GetRedisDbInstanceWithConfig,
+			fx.ParamTags(`name:"auth_rdb_config"`),
+			fx.ResultTags(`name:"auth_rdb"`),
+		),
+	),
+	fx.Provide(
+		fx.Annotate(
+			db.GetRedisDbInstanceWithConfig,
+			fx.ParamTags(`name:"ws_rdb_config"`),
+			fx.ResultTags(`name:"ws_rdb"`),
+		),
+	),
 )

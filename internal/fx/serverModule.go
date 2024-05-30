@@ -17,11 +17,12 @@ import (
 
 func newServerEngine(
 	lc fx.Lifecycle,
+	rdb_auth *redis.Client,
+	rdb_ws *redis.Client,
 	config *serverconfig.Config,
 	log *zap.Logger,
 	upgrader *websocket.Upgrader,
 	db *sql.DB,
-	rdb *redis.Client,
 	ctx context.Context,
 ) *gin.Engine {
 	gin.SetMode(config.GinMode)
@@ -31,7 +32,7 @@ func newServerEngine(
 	server.Use(middleware.DefaultStructuredLogger(log))
 	server.Use(gin.Recovery())
 
-	routes.NewRoutes(server, upgrader, log, db, rdb, ctx)
+	routes.NewRoutes(server, upgrader, log, db, rdb_auth, ctx)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
@@ -57,5 +58,10 @@ func newServerEngine(
 
 var serverModule = fx.Module(
 	"serverModule",
-	fx.Provide(newServerEngine),
+	fx.Provide(
+		fx.Annotate(
+			newServerEngine,
+			fx.ParamTags(``, `name:"auth_rdb"`, `name:"ws_rdb"`),
+		),
+	),
 )

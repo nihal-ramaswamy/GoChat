@@ -37,10 +37,18 @@ func WithDBRedis(db int) func(*RedisConfig) {
 	}
 }
 
-func DefaultRedisConfig() *RedisConfig {
+func DefaultRedisAuthConfig() *RedisConfig {
 	return NewRedisConfig(
 		WithAddrRedis(utils.GetDotEnvVariable(constants.REDIS_HOST)+":"+utils.GetDotEnvVariable(constants.REDIS_PORT)),
 		WithPasswordRedis(utils.GetDotEnvVariable(constants.REDIS_PASSWORD)),
 		WithDBRedis(0),
+	)
+}
+
+func DefaultRedisWebsocketConfig() *RedisConfig {
+	return NewRedisConfig(
+		WithAddrRedis(utils.GetDotEnvVariable(constants.REDIS_HOST)+":"+utils.GetDotEnvVariable(constants.REDIS_PORT)),
+		WithPasswordRedis(utils.GetDotEnvVariable(constants.REDIS_PASSWORD)),
+		WithDBRedis(1),
 	)
 }
