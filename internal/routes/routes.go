@@ -25,13 +25,13 @@ func NewRoutes(
 	rdb_auth *redis.Client,
 	ctx context.Context,
 	rdb_ws *redis.Client,
-	conferenceWsDto *dto.ConferenceWsDto,
+	roomDto *dto.Room,
 ) {
 	serverGroupHandlers := []interfaces.ServerGroupInterface{
 		healthcheck_api.NewHealthCheckGroup(db, rdb_auth, ctx, log),
 		auth_api.NewAuthGroup(db, rdb_auth, ctx, log),
-		rooms_api.NewRoomsApi(db, log, rdb_auth, ctx),
-		chat_api.NewChatApi(db, rdb_auth, ctx, log, upgrader, rdb_ws, conferenceWsDto),
+		rooms_api.NewRoomsApi(db, log, rdb_auth, ctx, roomDto),
+		chat_api.NewChatApi(db, rdb_auth, ctx, log, upgrader, rdb_ws, roomDto),
 	}
 
 	for _, serverGroupHandler := range serverGroupHandlers {

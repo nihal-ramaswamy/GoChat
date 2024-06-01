@@ -15,13 +15,15 @@ import (
 type CreateRoomHandler struct {
 	db          *sql.DB
 	log         *zap.Logger
+	roomDto     *dto.Room
 	middlewares []gin.HandlerFunc
 }
 
-func NewCreateRoomHandler(db *sql.DB, log *zap.Logger) *CreateRoomHandler {
+func NewCreateRoomHandler(db *sql.DB, log *zap.Logger, roomDto *dto.Room) *CreateRoomHandler {
 	return &CreateRoomHandler{
 		db:          db,
 		log:         log,
+		roomDto:     roomDto,
 		middlewares: []gin.HandlerFunc{},
 	}
 }
@@ -45,6 +47,8 @@ func (c *CreateRoomHandler) Handler() gin.HandlerFunc {
 		code := utils.NewCode(9)
 		conference := dto.NewConference(code, email)
 		err := db.CreateNewMeeting(c.db, conference)
+
+		c.roomDto.AddRoom(code)
 
 		utils.HandleErrorAndAbortWithError(ctx, err, c.log)
 

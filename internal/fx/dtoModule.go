@@ -7,5 +7,5 @@ import (
 
 var DtoModule = fx.Module(
 	"DtoModule",
-	fx.Provide(dto.NewConferenceWsDto),
+	fx.Provide(dto.NewRoom),
 )

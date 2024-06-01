@@ -13,11 +13,11 @@ import (
 )
 
 type ChatHandler struct {
-	log             *zap.Logger
-	upgrader        *websocket.Upgrader
-	rdb             *redis.Client
-	ctx             context.Context
-	conferenceWsDto *dto.ConferenceWsDto
+	log      *zap.Logger
+	upgrader *websocket.Upgrader
+	rdb      *redis.Client
+	ctx      context.Context
+	roomDto  *dto.Room
 
 	middlewares []gin.HandlerFunc
 }
@@ -27,14 +27,14 @@ func NewChatHandler(
 	log *zap.Logger,
 	rdb_ws *redis.Client,
 	ctx context.Context,
-	conferenceWsDto *dto.ConferenceWsDto,
+	roomDto *dto.Room,
 ) *ChatHandler {
 	return &ChatHandler{
-		log:             log,
-		upgrader:        upgrader,
-		rdb:             rdb_ws,
-		ctx:             ctx,
-		conferenceWsDto: conferenceWsDto,
+		log:      log,
+		upgrader: upgrader,
+		rdb:      rdb_ws,
+		ctx:      ctx,
+		roomDto:  roomDto,
 	}
 }
 
@@ -52,7 +52,7 @@ func (c *ChatHandler) Middlewares() []gin.HandlerFunc {
 
 func (c *ChatHandler) Handler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		// code := ctx.Param("code")
+		code := ctx.Param("code")
 		// email := ctx.GetString("email")
 
 		conn, err := c.upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
@@ -63,7 +63,7 @@ func (c *ChatHandler) Handler() gin.HandlerFunc {
 			utils.HandleErrorAndAbortWithError(ctx, err, c.log)
 		}()
 
-		c.conferenceWsDto.AddConnection(conn)
-		c.conferenceWsDto.HandleWs(conn)
+		c.roomDto.AddConnection(code, conn)
+		c.roomDto.HandleWs(code, conn)
 	}
 }

@@ -25,10 +25,10 @@ func NewChatApi(
 	log *zap.Logger,
 	upgrader *websocket.Upgrader,
 	rdb_ws *redis.Client,
-	conferenceWsDto *dto.ConferenceWsDto,
+	roomDto *dto.Room,
 ) *ChatApi {
 	handlers := []interfaces.HandlerInterface{
-		NewChatHandler(upgrader, log, rdb_ws, ctx, conferenceWsDto),
+		NewChatHandler(upgrader, log, rdb_ws, ctx, roomDto),
 	}
 
 	return &ChatApi{

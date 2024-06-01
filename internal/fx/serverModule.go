@@ -25,7 +25,7 @@ func newServerEngine(
 	upgrader *websocket.Upgrader,
 	db *sql.DB,
 	ctx context.Context,
-	conferenceWsDto *dto.ConferenceWsDto,
+	roomDto *dto.Room,
 ) *gin.Engine {
 	gin.SetMode(config.GinMode)
 
@@ -34,7 +34,7 @@ func newServerEngine(
 	server.Use(middleware.DefaultStructuredLogger(log))
 	server.Use(gin.Recovery())
 
-	routes.NewRoutes(server, upgrader, log, db, rdb_auth, ctx, rdb_ws, conferenceWsDto)
+	routes.NewRoutes(server, upgrader, log, db, rdb_auth, ctx, rdb_ws, roomDto)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {

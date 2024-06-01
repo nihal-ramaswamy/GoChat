@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nihal-ramaswamy/GoVid/internal/dto"
 	"github.com/nihal-ramaswamy/GoVid/internal/interfaces"
 	auth_middleware "github.com/nihal-ramaswamy/GoVid/internal/middleware/auth"
 	"github.com/redis/go-redis/v9"
@@ -24,9 +25,9 @@ func (h *RoomsApi) RouteHandlers() []interfaces.HandlerInterface {
 	return h.routeHandlers
 }
 
-func NewRoomsApi(db *sql.DB, log *zap.Logger, rdb_auth *redis.Client, ctx context.Context) *RoomsApi {
+func NewRoomsApi(db *sql.DB, log *zap.Logger, rdb_auth *redis.Client, ctx context.Context, roomDto *dto.Room) *RoomsApi {
 	handlers := []interfaces.HandlerInterface{
-		NewCreateRoomHandler(db, log),
+		NewCreateRoomHandler(db, log, roomDto),
 	}
 
 	return &RoomsApi{
