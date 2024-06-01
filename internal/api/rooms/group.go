@@ -1,10 +1,13 @@
 package rooms_api
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nihal-ramaswamy/GoVid/internal/interfaces"
+	auth_middleware "github.com/nihal-ramaswamy/GoVid/internal/middleware/auth"
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
 
@@ -21,14 +24,14 @@ func (h *RoomsApi) RouteHandlers() []interfaces.HandlerInterface {
 	return h.routeHandlers
 }
 
-func NewRoomsApi(db *sql.DB, log *zap.Logger) *RoomsApi {
+func NewRoomsApi(db *sql.DB, log *zap.Logger, rdb_auth *redis.Client, ctx context.Context) *RoomsApi {
 	handlers := []interfaces.HandlerInterface{
 		NewCreateRoomHandler(db, log),
 	}
 
 	return &RoomsApi{
 		routeHandlers: handlers,
-		middlewares:   []gin.HandlerFunc{},
+		middlewares:   []gin.HandlerFunc{auth_middleware.AuthMiddleware(db, rdb_auth, ctx, log)},
 	}
 }
 

@@ -3,9 +3,9 @@ package dto
 import "time"
 
 type Conference struct {
+	CreatedAt time.Time `json:"created_at"`
 	Code      string    `json:"code"`
 	Admin     string    `json:"admin"`
-	CreatedAt time.Time `json:"created_at"`
 	Active    bool      `json:"active"`
 }
 

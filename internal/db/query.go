@@ -12,7 +12,7 @@ func insertIntoConference(db *sql.DB, conference *dto.Conference) error {
 		return errors.New("Sql Db nil")
 	}
 
-	query := `INSERT INTO CONFERENCE(CODE, ADMIN, ACTIVE) VALUES ($1, $2, $3)`
+	query := `INSERT INTO "CONFERENCE" (CODE, ADMIN, ACTIVE) VALUES ($1, $2, $3)`
 	err := db.QueryRow(query, conference.Code, conference.Admin, conference.Active).Err()
 
 	return err

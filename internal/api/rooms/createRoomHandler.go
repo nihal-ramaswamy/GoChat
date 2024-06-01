@@ -46,9 +46,7 @@ func (c *CreateRoomHandler) Handler() gin.HandlerFunc {
 		conference := dto.NewConference(code, email)
 		err := db.CreateNewMeeting(c.db, conference)
 
-		if nil != err {
-			ctx.AbortWithError(http.StatusInternalServerError, err)
-		}
+		utils.HandleErrorAndAbortWithError(ctx, err, c.log)
 
 		ctx.JSON(http.StatusOK, gin.H{
 			"code": code,
