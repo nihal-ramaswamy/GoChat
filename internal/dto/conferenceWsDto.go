@@ -1,8 +1,6 @@
 package dto
 
 import (
-	"io"
-
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 )
@@ -23,6 +21,11 @@ func (c *ConferenceWsDto) AddConnection(ws *websocket.Conn) {
 	c.People[ws] = true // TODO: Make this concurrent safe
 }
 
+func (c *ConferenceWsDto) RemoveConnection(ws *websocket.Conn) {
+	c.People[ws] = false
+	ws.Close()
+}
+
 func (c *ConferenceWsDto) HandleWs(ws *websocket.Conn) {
 	c.readLoop(ws)
 }
@@ -33,11 +36,12 @@ func (c *ConferenceWsDto) readLoop(ws *websocket.Conn) {
 	for {
 		err := ws.ReadJSON(&message)
 		if nil != err {
-			if io.EOF == err {
+			if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
+				c.RemoveConnection(ws)
 				break
 			}
-			c.log.Error("Error in reading bytes", zap.Error(err))
-			continue
+			c.log.Error("Error in connection", zap.Error(err))
+			break
 		}
 
 		c.broadcast(message)
@@ -45,11 +49,10 @@ func (c *ConferenceWsDto) readLoop(ws *websocket.Conn) {
 }
 
 func (c *ConferenceWsDto) broadcast(message Message) {
-	i := 0
-	c.log.Info("Broadcasting", zap.Int("Number", len(c.People)))
-	for ws := range c.People {
-		c.log.Info("broadcast", zap.Int("person", i))
-		i += 1
+	for ws, active := range c.People {
+		if !active {
+			continue
+		}
 		go func(ws *websocket.Conn) {
 			ws.WriteJSON(message)
 		}(ws)
