@@ -1,2 +1,2 @@
 # Go Video
-A video conference backend app in golang.
+A golang chat application backend app using websockets.
