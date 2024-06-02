@@ -54,7 +54,10 @@ func (c *ConferenceWsDto) broadcast(message Message) {
 			continue
 		}
 		go func(ws *websocket.Conn) {
-			ws.WriteJSON(message)
+			err := ws.WriteJSON(message)
+			if nil != err {
+				c.log.Error("error writing json", zap.Error(err))
+			}
 		}(ws)
 	}
 }
